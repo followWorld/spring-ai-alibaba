@@ -67,9 +67,11 @@ export default function EditDrawer(props: IProps) {
   const handleSave = () => {
     form.validateFields().then((formValues: any) => {
       const { input } = state;
-      let params = [...input.system_params];
-      input.user_params.forEach((item) => {
-        params = [...params, ...item.params];
+      const systemParams = input.system_params || [];
+      const userParams = input.user_params || [];
+      let params = [...systemParams];
+      userParams.forEach((item) => {
+        params = [...params, ...(item.params || [])];
       });
       if (params.some((item) => !item.alias && item.display)) {
         message.warning(
@@ -335,3 +337,4 @@ export default function EditDrawer(props: IProps) {
     </Drawer>
   );
 }
+

@@ -2,29 +2,50 @@
 # To use this profile, run with: -Dspring.profiles.active=local
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/admin?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://192.168.10.1:23306/admin?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
     username: admin
-    password: admin
+    password: ENC(ZDJhCuzG8qb7S1z8T+sK/Fl4NccnjW2nN7E/zK4oIfXB39/ExDiozXn3vV2WpudZ)
   data:
     redis:
-      host: localhost
-      port: 6379
+      host: 192.168.10.1
+      port: 26379
+      # 如果Redis启用了密码认证，请设置环境变量 SPRING_REDIS_PASSWORD
+      password: ${SPRING_REDIS_PASSWORD:}
   elasticsearch:
-    uris: http://localhost:9200
+    uris: http://192.168.10.1:29200
+    # 如果ES启用了认证，请设置环境变量
+    username: ${SPRING_ELASTICSEARCH_USERNAME:}
+    password: ${SPRING_ELASTICSEARCH_PASSWORD:}
   jpa:
     properties:
       jakarta:
         persistence:
           jdbc:
-            url: jdbc:mysql://localhost:3306/admin?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+            url: jdbc:mysql://192.168.10.1:23306/admin?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
             user: admin
-            password: admin
+            password: ENC(ZDJhCuzG8qb7S1z8T+sK/Fl4NccnjW2nN7E/zK4oIfXB39/ExDiozXn3vV2WpudZ)
             driver: com.mysql.cj.jdbc.Driver
 nacos:
-  server-addr: localhost:8848
+  server-addr: 192.168.10.1:27848
+  # ⚠️ Nacos认证配置（如有需要请设置环境变量）
+  username: ${NACOS_USERNAME:nacos}
+  password: ${NACOS_PASSWORD:ENC(ZDJhCuzG8qb7S1z8T+sK/Fl4NccnjW2nN7E/zK4oIfXB39/ExDiozXn3vV2WpudZ)}
+
 rocketmq:
-  endpoints: localhost:18080
+  enabled: false
+  endpoints: 192.168.10.1:28080
+  # 如果RocketMQ启用了认证，请设置环境变量
+  access-key: ${ROCKETMQ_ACCESS_KEY:}
+  secret-key: ${ROCKETMQ_SECRET_KEY:}
+
 management:
   otlp:
     tracing:
-      endpoint: http://localhost:4318/v1/traces
+      endpoint: http://192.168.10.1:24318/v1/traces
+
+# ⚠️ 开发环境专用配置
+logging:
+  level:
+    root: INFO
+    com.alibaba.cloud.ai: DEBUG
+    # 生产环境中请调整日志级别以避免敏感信息泄露

@@ -5,7 +5,7 @@ server:
     min-response-size: 2048
 nacos:
   # 支持通过环境变量 NACOS_SERVER_ADDR 覆盖，默认值在各个 profile 中定义
-  server-addr: ${NACOS_SERVER_ADDR}
+  server-addr: ${NACOS_SERVER_ADDR:192.168.10.1:27848}
 management:
   tracing:
     sampling:
@@ -15,7 +15,7 @@ management:
       export:
         enabled: true
       # 支持通过环境变量 MANAGEMENT_OTLP_TRACING_EXPORT_ENDPOINT 覆盖，默认值在各个 profile 中定义
-      endpoint: ${MANAGEMENT_OTLP_TRACING_EXPORT_ENDPOINT}
+      endpoint: ${MANAGEMENT_OTLP_TRACING_EXPORT_ENDPOINT:http://192.168.10.1:24318/v1/traces}
     metrics:
       export:
         enabled: false
@@ -37,6 +37,8 @@ management:
     health:
       show-details: always
 spring:
+  profiles:
+    active: local
   ai:
     chat:
       client:
@@ -73,9 +75,9 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     # 支持通过环境变量覆盖，默认值在各个 profile 中定义
     # SPRING_DATASOURCE_URL, SPRING_DATASOURCE_USERNAME, SPRING_DATASOURCE_PASSWORD
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://192.168.10.1:23306/admin?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai}
+    username: ${SPRING_DATASOURCE_USERNAME:admin}
+    password: ENC(ZDJhCuzG8qb7S1z8T+sK/Fl4NccnjW2nN7E/zK4oIfXB39/ExDiozXn3vV2WpudZ)
     druid:
       initial-size: 5
       min-idle: 5
@@ -94,8 +96,8 @@ spring:
     redis:
       # 支持通过环境变量覆盖，默认值在各个 profile 中定义
       # SPRING_REDIS_HOST, SPRING_REDIS_PORT, SPRING_REDIS_DATABASE
-      host: ${SPRING_REDIS_HOST}
-      port: ${SPRING_REDIS_PORT}
+      host: ${SPRING_REDIS_HOST:192.168.10.1}
+      port: ${SPRING_REDIS_PORT:26379}
       database: ${SPRING_REDIS_DATABASE:0}
   freemarker:
     cache: false
@@ -108,7 +110,7 @@ spring:
     # Spring Boot 默认 Elasticsearch 配置（如果使用 Spring Data Elasticsearch）
     # 注意：自定义 ElasticsearchClient 的配置在 elasticsearch.yml 中
     # 支持通过环境变量 SPRING_ELASTICSEARCH_URIS 覆盖，默认值在各个 profile 中定义
-    uris: ${SPRING_ELASTICSEARCH_URIS}
+    uris: ${SPRING_ELASTICSEARCH_URIS:http://192.168.10.1:29200}
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
@@ -133,8 +135,9 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 rocketmq:
   # 支持通过环境变量覆盖，默认值在各个 profile 中定义
-  # ROCKETMQ_ENDPOINTS, ROCKETMQ_DOCUMENT_INDEX_TOPIC, ROCKETMQ_DOCUMENT_INDEX_GROUP
-  endpoints: ${ROCKETMQ_ENDPOINTS}
+  # ROCKETMQ_ENABLED, ROCKETMQ_ENDPOINTS, ROCKETMQ_DOCUMENT_INDEX_TOPIC, ROCKETMQ_DOCUMENT_INDEX_GROUP
+  enabled: ${ROCKETMQ_ENABLED:true}
+  endpoints: ${ROCKETMQ_ENDPOINTS:192.168.10.1:29876}
   document-index-topic: ${ROCKETMQ_DOCUMENT_INDEX_TOPIC:topic_saa_studio_document_index}
   document_index_group: ${ROCKETMQ_DOCUMENT_INDEX_GROUP:group_saa_studio_document_index}
 initializr:
@@ -144,3 +147,8 @@ logging:
   level:
     org.springframework.boot.autoconfigure: INFO
     org.springframework.boot.task: INFO
+
+
+jasypt:
+  encryptor:
+    password: ${ENCRYPTOR_FRONT_PD:}

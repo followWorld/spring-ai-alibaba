@@ -310,7 +310,19 @@
             <groupId>com.alibaba.cloud.ai</groupId>
             <artifactId>spring-ai-alibaba-admin-server-runtime</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud.ai</groupId>
+            <artifactId>spring-ai-alibaba-agent-framework</artifactId>
+            <version>1.1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
 
+        <!--密码加密-->
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>4.0.3</version>
+        </dependency>
 
     </dependencies>
 
@@ -372,3 +384,4 @@
         </plugins>
     </build>
 </project>
+
